@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Sparkling - Вход{% endblock %}
+
+{% block body_class %}login{% endblock %}
+
+{% block main_block %}
+    <section class="banner">
+        <div class="banner-overlay">
+            <div class="banner__content">
+                <h1>Вход</h1>
+            </div>
+        </div>
+    </section>
+    <main>
+    Введите данные для входа
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <button class="button" type="submit">Войти</button><br><br>
+            <a href="{% url 'signup' %}" target="_blank">Зарегистрироваться</a>
+        </form>
+    </main>
+{% endblock %}

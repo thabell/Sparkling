@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Sparkling{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
+</head>
+<body class="{% block body_class %}base{% endblock %}">
+    <header>
+        <div class="main-logo-wrapper">
+            <a class="main-logo" href="{% url 'index' %}" title="Главная">Sparkling</a>
+        </div>
+        <nav class="header-nav">
+            <ul>
+                <li>
+                    <a href="{% url 'feed' %}">Все</a>
+                </li>
+                <li>
+                    <a href="{% url 'feed' %}?sort=popular">Популярные</a>
+                </li>
+                <li>
+                    <a href="{% url 'feed' %}?sort=new">Новые</a>
+                </li>
+                {% for part in parts %}
+                    <li class="nav__drop-down-parent">
+                        <a href="{% url 'feed' %}?part_id={{ part.id }}">{{ part }}</a>
+                        <ul class="nav__drop-down-child">
+                            {% for categorr in part.category.all %}
+                                <li>
+                                    <a href="{% url 'feed' %}?category_id={{ categorr.id }}">{{ categorr }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+                <li>
+                    <a href="{% url 'profile' %}">Профиль</a>
+                </li>
+                <li>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'logout' %}">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Войти</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </header>
+    {% block main_block %}
+    {% endblock %}
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer__contacts">
+                <h3><a class="h3" href="{% url 'about' %}">О нас</a></h3>
+                <p>г. Москва<br>ул. 4-я Западная, 60<br>8 (3344) 3456872</p>
+                <ul class="footer__socials">
+                    <li><a href="#">f</a></li>
+                    <li><a href="#">l</a></li>
+                    <li><a href="#">g</a></li>
+                    <li><a href="#">v</a></li>
+                    <li><a href="#">r</a></li>
+                </ul>
+            </div>
+            <div class="footer__map">
+                <h3>Карта сайта</h3>
+                <ul>
+                    <li><a href="{% url 'index' %}">Главная</a></li>
+                    <li><a href="{% url 'about' %}">О нас</a></li>
+                    <li><a href="{% url 'feed' %}">Лента</a></li>
+                    <li><a href="{% url 'profile' %}">Профиль</a></li>
+                    <li><a href="{% url 'contact' %}">Написать нам</a></li>
+                </ul>
+            </div>
+            <div class="footer__categories">
+                <h3>Категории</h3>
+                <ul>
+                {% for part in parts %}
+                    <li class="nav__drop-down-parent">
+                        <a href="{% url 'feed' %}?part_id={{ part.id }}">{{ part }}</a>
+                        <ul class="nav__drop-down-child">
+                            {% for categorr in part.category.all %}
+                                <li>
+                                    <a href="{% url 'feed' %}?category_id={{ categorr.id }}">{{ categorr }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="footer__copyright">
+            <p>Copyright © 2020 Sparkling | All Rights Reserved</p>
+        </div>
+    </footer>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Sparkling - Лента{% endblock %}
+
+{% block body_class %}feed{% endblock %}
+
+{% block main_block %}
+    <section class="banner">
+        <div class="banner-overlay">
+            <div class="banner__content">
+                {% if author_id %}
+                    <h1>Лента<br>Автор: {{ curr_author.last_name }} {{ curr_author.first_name }} @{{ curr_author.username }}</h1>
+                {% elif category_id %}
+                    <div class="category-tag" style="background-color: {{ curr_category.colr }};">{{ curr_category }}</div>
+                    <h1>Лента<br>Категория: {{ curr_category }}</h1>
+                {% elif tag_id %}
+                    <div class="category-tag">{{ curr_tag }}</div>
+                    <h1>Лента<br>Тег: {{ curr_tag }}</h1>
+                {% elif part_id %}
+                    <h1>Лента<br>Раздел: {{ curr_part }}</h1>
+                {% elif sort %}
+                    <h1>Лента<br>Сортировка: {% if sort == "new" %}Новые{% elif sort == "popular" %}Популярные{% endif %}</h1>
+                {% else %}
+                    <h1>Лента: Все</h1>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <div class="with-side-bar-wrapper">
+        <main>
+            <h2 class="visually-hidden">Список статей ленты</h2>
+            <div class="dynamic-block">
+                <p class="h3">Найдено статей: {{ content_len }}</p>
+                <ul class="post-preview-middle-list lvl-1">
+                    {% for postt in content %}
+                    <li class="post-preview-middle">
+                        <a href="{% url 'post' %}?post_id={{ postt.id }}">
+                            <img src="{{ postt.preview.url }}" alt="{{ postt }}">
+                            <div class="post-preview-small__info">
+                                <div class="post-preview-small__tags">
+                                    {% for categorr in postt.category.all %}
+                                        <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                    {% endfor %}
+                                </div>
+                                <span class="post-preview-small__title">{{ postt.title }}</span>
+                                <div class="author-info"><span class="author-info__img"><img src="{{ postt.user.user_data.photo.url }}" alt="{{ postt.user }}"></span>{{ postt.user.last_name }} {{ postt.user.first_name }} @{{ postt.user.username }} | {{ postt.date }}</div>
+                                <span class="post-preview-small__annotation">{{ postt.annotation }}</span>
+                            </div>
+                        </a>
+                        <a class="button" href="{% url 'post' %}?post_id={{ postt.id }}">Читать</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </main>
+        <div class="side-bar">
+            <h2 class="visually-hidden">Боковая панель</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <h3>Найти статьи автора по нику</h3>
+                <label for="author_search_input">@</label><input type="text" name="author_search" placeholder="user1" id="author_search_input"><button class="button" type="submit">Найти</button>
+            </form>
+            <div class="random-author">
+                <h3>Рандомный автор</h3>
+                <a href="{% url 'feed' %}?author_id={{ random_user.id }}"><span class="random-author__img"><img src="{{ random_user.user_data.photo.url }}" alt="{{ random_user }}"></span></a>
+                <div class="h2">{{ random_user.last_name }} {{ random_user.first_name }} @{{ random_user.username }}</div>
+                <p class="author__annotation">{{ random_user.user_data.annotation }}</p>
+                <a class="button" href="{% url 'feed' %}?author_id={{ random_user.id }}">Статьи автора</a>
+            </div>
+            <div class="popular-posts">
+                <h3>Популярные статьи</h3>
+                <ul class="post-preview-small-list">
+                    {% for pop_p in four_popular_posts %}
+                        <li class="post-preview-small">
+                            <a href="{% url 'post' %}?post_id={{ pop_p.id }}">
+                                <div class="post-preview-small__info">
+                                    <div class="post-preview-small__tags">
+                                        {% for categorr in pop_p.category.all %}
+                                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="post-preview-small__title">{{ pop_p.title }}</span>
+                                    <span class="post-preview-small__date">{{ pop_p.date }}</span>
+                                </div>
+                                <img src="{{ pop_p.preview.url }}" alt="{{ pop_p }}">
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="side-categories">
+                <h3>Категории</h3>
+                {% for part in parts %}
+                    {% for categ in part.category.all %}
+                        <a class="side-categories__item" href="{% url 'feed' %}?category_id={{ categ.id }}">
+                            <span class="category-tag" style="background-color: {{ categ.colr }};">{{ categ }}</span>
+                        </a>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="side-tags">
+                <h3>Теги</h3>
+                {% for tagg in tags %}
+                    <a class="side-tags__item" href="{% url 'feed' %}?tag_id={{ tagg.id }}">
+                        <span class="category-tag">{{ tagg }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

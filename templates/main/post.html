@@ -1,0 +1,123 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ article }}{% endblock %}
+
+{% block body_class %}post{% endblock %}
+
+{% block main_block %}
+    <section class="banner" style="background-image: url('{{ article.preview.url }}')">
+        <div class="banner-overlay">
+            <div class="banner__content">
+                <div>
+                    {% for categorr in article.category.all %}
+                        <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                    {% endfor %}
+                </div>
+                <h1>{{ article.title }}</h1>
+                <a class="author-info" href="{% url 'feed' %}?author_id={{ article.user.id }}"><span class="author-info__img"><img src="{{ article.user.user_data.photo.url }}" alt="{{ article.user }}"></span>{{ article.user.last_name }} {{ article.user.first_name }} @{{ article.user.username }} | {{ article.date }}</a>
+            </div>
+        </div>
+    </section>
+    <div class="with-side-bar-wrapper">
+        <main>
+            <div class="dynamic-block">
+                {{ article.get_html }}
+            </div>
+            <br>
+            <div class="article-tags">
+                <div>
+                    {% for categorr in article.category.all %}
+                        <a href="{% url 'feed' %}?category_id={{ categorr.id }}">
+                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for tagg in article.tag.all %}
+                        <a href="{% url 'feed' %}?tag_id={{ tagg.id }}">
+                            <span class="category-tag">{{ tagg }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="comments">
+                <h2>Комментарии</h2>
+                {% if article.comment.all %}
+                    {% for commentt in article.comment.all %}
+                        <div class="author-info comment">
+                            <a href="{% url 'feed' %}?author_id={{ commentt.user.id }}"><span class="author-info__img"><img src="{{ commentt.user.user_data.photo.url }}" alt="{{ commentt.user }}"></span></a>
+                            <div>
+                                <span class="h4">{{ commentt.user.last_name }} {{ commentt.user.first_name }} @{{ commentt.user.username }}</span> | {{ commentt.date }}
+                                <p>{{ commentt.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Комментариев пока что нет. Оставьте первый комментарий!</p>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <button class="button" type="submit">Оставить комментарий</button>
+                    </form>
+                {% else %}
+                    <a class="button" href="{% url 'login' %}">Войдите</a> или
+                    <a class="button" href="{% url 'signup' %}">Зарегистрируйтесь</a> чтобы написать комментарий
+                {% endif %}
+            </div>
+        </main>
+        <div class="side-bar">
+            <h2 class="visually-hidden">Боковая панель</h2>
+            <div class="random-author">
+                <h3>Рандомный автор</h3>
+                <a href="{% url 'feed' %}?author_id={{ random_user.id }}"><span class="random-author__img"><img src="{{ random_user.user_data.photo.url }}" alt="{{ random_user }}"></span></a>
+                <div class="h2">{{ random_user.last_name }} {{ random_user.first_name }} @{{ random_user.username }}</div>
+                <p class="author__annotation">{{ random_user.user_data.annotation }}</p>
+                <a class="button" href="{% url 'feed' %}?author_id={{ random_user.id }}">Статьи автора</a>
+            </div>
+            <div class="popular-posts">
+                <h3>Популярные статьи</h3>
+                <ul class="post-preview-small-list">
+                    {% for pop_p in four_popular_posts %}
+                        <li class="post-preview-small">
+                            <a href="{% url 'post' %}?post_id={{ pop_p.id }}">
+                                <div class="post-preview-small__info">
+                                    <div class="post-preview-small__tags">
+                                        {% for categorr in pop_p.category.all %}
+                                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="post-preview-small__title">{{ pop_p.title }}</span>
+                                    <span class="post-preview-small__date">{{ pop_p.date }}</span>
+                                </div>
+                                <img src="{{ pop_p.preview.url }}" alt="{{ pop_p }}">
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="side-categories">
+                <h3>Категории</h3>
+                {% for part in parts %}
+                    {% for categ in part.category.all %}
+                        <a class="side-categories__item" href="{% url 'feed' %}?category_id={{ categ.id }}">
+                            <span class="category-tag" style="background-color: {{ categ.colr }};">{{ categ }}</span>
+                        </a>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="side-tags">
+                <h3>Теги</h3>
+                {% for tagg in tags %}
+                    <a class="side-tags__item" href="{% url 'feed' %}?tag_id={{ tagg.id }}">
+                        <span class="category-tag">{{ tagg }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}<script>document.querySelector(".dynamic-block").innerHTML = document.querySelector(".dynamic-block").innerText;</script>{% endblock %}

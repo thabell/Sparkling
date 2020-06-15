@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Sparkling - {% if sent %}Спасибо за Ваше письмо!{% else %}Напишите нам{% endif %}{% endblock %}
+
+{% block body_class %}contact{% endblock %}
+
+{% block main_block %}
+    <section class="banner">
+        <div class="banner-overlay">
+            <div class="banner__content">
+                <h1>{% if sent %}Спасибо за Ваше письмо!{% else %}Напишите нам{% endif %}</h1>
+            </div>
+        </div>
+    </section>
+    <main>
+        {% if sent %}
+            <br><br><br>
+            <h2 class="visually-hidden">Продолжить серфинг</h2>
+            <p>Вы можете продолжить серфинг по нашему сервису</p>
+            <div><a class="button" href="{% url 'index' %}">На главную</a></div><br>
+            <div><a class="button" href="{% url 'profile' %}">Профиль</a></div><br>
+            <div><a class="button" href="{% url 'feed' %}">Лента</a></div><br>
+        {% else %}
+            <br><br><br>
+            <p>Ниже представлена форма, в которой Вы можете написать все, что думаете</p>
+            <h2 class="visually-hidden">Форма письма</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ letter_form.as_p }}
+                <button class="button" type="submit">Оправить</button>
+            </form>
+        {% endif %}
+    </main>
+{% endblock %}

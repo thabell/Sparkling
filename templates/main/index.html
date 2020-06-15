@@ -1,0 +1,248 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Sparkling - Главная{% endblock %}
+
+{% block body_class %}index{% endblock %}
+
+{% block main_block %}
+    <h1 class="visually-hidden">Главная страница</h1>
+    <section class="banner" style="background-image: url('{{ four_popular_posts.0.preview.url }}')">
+        <div class="banner-overlay">
+            <h2 class="visually-hidden">Самая популярная статья</h2>
+            <div class="banner__content">
+                <div>
+                    {% for categorr in four_popular_posts.0.category.all %}
+                        <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                    {% endfor %}
+                </div>
+                <h3><a class="h1" href="{% url 'post' %}?post_id={{ four_popular_posts.0.id }}">{{ four_popular_posts.0.title }}</a></h3>
+                <div class="author-info"><span class="author-info__img"><img src="{{ four_popular_posts.0.user.user_data.photo.url }}" alt="{{ four_popular_posts.0.user }}"></span>{{ four_popular_posts.0.user.last_name }} {{ four_popular_posts.0.user.first_name }} @{{ four_popular_posts.0.user.username }} | {{ four_popular_posts.0.date }}</div>
+            </div>
+        </div>
+    </section>
+    <main>
+
+    <h2>Новые статьи</h2>
+    <ul class="new-list post-preview-small-list">
+        {% for new_post in three_new_posts %}
+            <li class="post-preview-small image-first">
+                <a href="{% url 'post' %}?post_id={{ new_post.id }}">
+                    <img src="{{ new_post.preview.url }}" alt="{{ new_post }}">
+                    <div class="post-preview-small__info">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in new_post.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <span class="post-preview-small__title">{{ new_post.title }}</span>
+                    </div>
+                </a>
+            </li>
+        {%  endfor %}
+    </ul>
+
+    <h2>Подборка разных статей</h2>
+    <ul class="random-list post-preview-tile-list lvl-1">
+        <li class="post-preview-tile" style="background-image: url('{{ four_random_posts.0.preview.url }}');">
+            <a href="{% url 'post' %}?post_id={{ four_random_posts.0.id }}">
+                <div class="post-preview-small__tags">
+                    {% for categorr in four_random_posts.0.category.all %}
+                        <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    <span class="post-preview-tile__title">{{ four_random_posts.0.title }}</span><br>
+                    <span class="post-preview-tile__date">{{ four_random_posts.0.date }}</span>
+                </div>
+            </a>
+        </li>
+        <div class="lvl-2">
+            <li class="post-preview-tile" style="background-image: url('{{ four_random_posts.1.preview.url }}')">
+                <a href="{% url 'post' %}?post_id={{ four_random_posts.1.id }}">
+                    <div class="post-preview-small__tags">
+                        {% for categorr in four_random_posts.1.category.all %}
+                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <span class="post-preview-tile__title">{{ four_random_posts.1.title }}</span><br>
+                        <span class="post-preview-tile__date">{{ four_random_posts.1.date }}</span>
+                    </div>
+                </a>
+            </li>
+            <div class="lvl-3">
+                <li class="post-preview-tile" style="background-image: url('{{ four_random_posts.2.preview.url }}')">
+                    <a href="{% url 'post' %}?post_id={{ four_random_posts.2.id }}">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in four_random_posts.2.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <span class="post-preview-tile__title">{{ four_random_posts.2.title }}</span><br>
+                            <span class="post-preview-tile__date">{{ four_random_posts.2.date }}</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="post-preview-tile" style="background-image: url('{{ four_random_posts.3.preview.url }}')">
+                    <a href="{% url 'post' %}?post_id={{ four_random_posts.3.id }}">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in four_random_posts.3.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <span class="post-preview-tile__title">{{ four_random_posts.3.title }}</span><br>
+                            <span class="post-preview-tile__date">{{ four_random_posts.3.date }}</span>
+                        </div>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </ul>
+
+    <h2>Популярные статьи</h2>
+    <ul class="popular-list post-preview-middle-list lvl-1">
+        <li class="post-preview-middle">
+            <a href="{% url 'post' %}?post_id={{ four_popular_posts.0.id }}">
+                <img src="{{ four_popular_posts.0.preview.url }}" alt="{{ four_popular_posts.0 }}">
+                <div class="post-preview-small__info">
+                    <div class="post-preview-small__tags">
+                        {% for categorr in four_popular_posts.0.category.all %}
+                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                        {% endfor %}
+                    </div>
+                    <span class="post-preview-small__title">{{ four_popular_posts.0.title }}</span>
+                    <div class="author-info"><span class="author-info__img"><img src="{{ four_popular_posts.0.user.user_data.photo.url }}" alt="{{ four_popular_posts.0.user }}"></span>{{ four_popular_posts.0.user.last_name }} {{ four_popular_posts.0.user.first_name }} @{{ four_popular_posts.0.user.username }} | {{ four_popular_posts.0.date }}</div>
+                    <span class="post-preview-small__annotation">{{ four_popular_posts.0.annotation }}</span>
+                </div>
+            </a>
+        </li>
+        <div class="lvl-2">
+            <li class="post-preview-small">
+                <a href="{% url 'post' %}?post_id={{ four_popular_posts.1.id }}">
+                    <div class="post-preview-small__info">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in four_popular_posts.1.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <span class="post-preview-small__title">{{ four_popular_posts.1.title }}</span>
+                        <span class="post-preview-small__date">{{ four_popular_posts.1.date }}</span>
+                        <br><span class="post-preview-small__annotation">{{ four_popular_posts.1.annotation }}</span>
+                    </div>
+                    <img src="{{ four_popular_posts.1.preview.url }}" alt="{{ four_popular_posts.1 }}">
+                </a>
+            </li>
+            <li class="post-preview-small">
+                <a href="{% url 'post' %}?post_id={{ four_popular_posts.2.id }}">
+                    <div class="post-preview-small__info">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in four_popular_posts.2.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <span class="post-preview-small__title">{{ four_popular_posts.2.title }}</span>
+                        <span class="post-preview-small__date">{{ four_popular_posts.2.date }}</span>
+                        <br><span class="post-preview-small__annotation">{{ four_popular_posts.2.annotation }}</span>
+                    </div>
+                    <img src="{{ four_popular_posts.2.preview.url }}" alt="{{ four_popular_posts.2 }}">
+                </a>
+            </li>
+            <li class="post-preview-small">
+                <a href="{% url 'post' %}?post_id={{ four_popular_posts.3.id }}">
+                    <div class="post-preview-small__info">
+                        <div class="post-preview-small__tags">
+                            {% for categorr in four_popular_posts.3.category.all %}
+                                <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                            {% endfor %}
+                        </div>
+                        <span class="post-preview-small__title">{{ four_popular_posts.3.title }}</span>
+                        <span class="post-preview-small__date">{{ four_popular_posts.3.date }}</span>
+                        <br><span class="post-preview-small__annotation">{{ four_popular_posts.3.annotation }}</span>
+                    </div>
+                    <img src="{{ four_popular_posts.3.preview.url }}" alt="{{ four_popular_posts.3 }}">
+                </a>
+            </li>
+        </div>
+    </ul>
+
+
+    <h2 class="visually-hidden">Статьи по категориям</h2>
+        <div class="categories-posts-wrapper">
+            {% for cat in three_random_categ %}
+                <ul class="post-preview-middle-list lvl-1">
+                    <h3><a class="h2" href="{% url 'feed' %}?category_id={{ cat.id }}">{{ cat }}</a></h3>
+                    {% if cat.post.all.0 %}
+                        <li class="post-preview-middle">
+                            <a href="{% url 'post' %}?post_id={{ cat.post.all.0.id }}">
+                                <img src="{{ cat.post.all.0.preview.url }}" alt="{{ cat.post.all.0 }}">
+                                <div class="post-preview-small__info">
+                                    <div class="post-preview-small__tags">
+                                        {% for categorr in cat.post.all.0.category.all %}
+                                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="post-preview-small__title">{{ cat.post.all.0.title }}</span>
+                                    <div class="author-info"><span class="author-info__img"><img src="{{ cat.post.all.0.user.user_data.photo.url }}" alt="{{ cat.post.all.0.user }}"></span>{{ cat.post.all.0.user.last_name }} {{ cat.post.all.0.user.first_name }} @{{ cat.post.all.0.user.username }} | {{ cat.post.all.0.date }}</div>
+                                    <span class="post-preview-small__annotation">{{ cat.post.all.0.annotation }}</span>
+                                </div>
+                            </a>
+                        </li>
+                        {% if cat.post.all.1 %}
+                            <div class="lvl-2">
+                                <li class="post-preview-small">
+                                    <a href="{% url 'post' %}?post_id={{ cat.post.all.1.id }}">
+                                        <div class="post-preview-small__info">
+                                            <div class="post-preview-small__tags">
+                                                {% for categorr in cat.post.all.1.category.all %}
+                                                    <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                                {% endfor %}
+                                            </div>
+                                            <span class="post-preview-small__title">{{ cat.post.all.1.title }}</span>
+                                            <span class="post-preview-small__date">{{ cat.post.all.1.date }}</span>
+                                        </div>
+                                        <img src="{{ cat.post.all.1.preview.url }}" alt="{{ cat.post.all.1 }}">
+                                    </a>
+                                </li>
+                                {% if cat.post.all.2 %}
+                                    <li class="post-preview-small">
+                                        <a href="{% url 'post' %}?post_id={{ cat.post.all.2.id }}">
+                                            <div class="post-preview-small__info">
+                                                <div class="post-preview-small__tags">
+                                                    {% for categorr in cat.post.all.2.category.all %}
+                                                        <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                                <span class="post-preview-small__title">{{ cat.post.all.2.title }}</span>
+                                                <span class="post-preview-small__date">{{ cat.post.all.2.date }}</span>
+                                            </div>
+                                            <img src="{{ cat.post.all.2.preview.url }}" alt="{{ cat.post.all.2 }}">
+                                        </a>
+                                    </li>
+                                    {% if cat.post.all.3 %}
+                                        <li class="post-preview-small">
+                                            <a href="{% url 'post' %}?post_id={{ cat.post.all.3.id }}">
+                                                <div class="post-preview-small__info">
+                                                    <div class="post-preview-small__tags">
+                                                        {% for categorr in cat.post.all.3.category.all %}
+                                                            <span class="category-tag" style="background-color: {{ categorr.colr }};">{{ categorr }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <span class="post-preview-small__title">{{ cat.post.all.3.title }}</span>
+                                                    <span class="post-preview-small__date">{{ cat.post.all.3.date }}</span>
+                                                </div>
+                                                <img src="{{ cat.post.all.3.preview.url }}" alt="{{ cat.post.all.3 }}">
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}
